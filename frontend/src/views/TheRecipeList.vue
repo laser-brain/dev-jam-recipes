@@ -3,11 +3,10 @@
     <router-link
       v-for="recipe in recipes"
       :to="`/recipe/${recipe.id}`"
-      class="recipe-preview"
       custom
       v-slot="{ navigate }"
     >
-      <div @click="navigate">
+      <div class="recipe-preview" @click="navigate">
         <img :src="recipe.thumbnail" alt="recipe" />
         <h2>{{ recipe.name }}</h2>
       </div>
@@ -21,10 +20,7 @@ import * as repository from '../services/recipes-repository'
 import { IRecipe } from "../types/viewModels";
 
 onMounted(async () => {
-  const data = await repository.recipes()
-  console.log(data);
-
-  recipes.value = data;
+  recipes.value = await repository.recipes();
 });
 
 const recipes: Ref<IRecipe[] | null> = ref([])
