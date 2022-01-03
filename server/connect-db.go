@@ -51,8 +51,32 @@ func InsertRecipe(recipe *Recipe) {
 	fmt.Printf("Insert response: %q\n", res)
 }
 
-func GetAllRecipesPaged(page int, size int) {
+func GetAllRecipesPaged(skip *int64, size *int64, responseChannel chan []Recipe) {
 
+	ctx, client, cancel := loadCollection()
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	collection := client.Database("recipes").Collection("recipes")
+
+	opts := &options.FindOptions{
+		Skip:  skip,
+		Limit: size,
+	}
+	cur, currErr := collection.Find(ctx, bson.D{}, opts)
+
+	if currErr != nil {
+		panic(currErr)
+	}
+	defer cur.Close(ctx)
+
+	var recipes []Recipe
+	err := cur.All(ctx, &recipes)
+	if err != nil {
+		panic(err)
+	}
+
+	responseChannel <- recipes
 }
 
 func TestConnection() []Recipe {
@@ -77,7 +101,7 @@ func TestConnection() []Recipe {
 	return recipes
 }
 
-func loadCollection() (ctx context.Context, client *mongo.Client, Cancel context.CancelFunc) {
+func loadCollection() (context.Context, *mongo.Client, context.CancelFunc) {
 	dbUser := os.Getenv("MONGO_DB_USER")
 	dbPassword := os.Getenv("MONGO_DB_PASSWORD")
 	dbUrl := os.Getenv("MONGO_DB_URL")
