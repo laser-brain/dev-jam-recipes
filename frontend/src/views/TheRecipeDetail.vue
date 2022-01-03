@@ -2,6 +2,13 @@
   <router-link :to="'/'">Overview</router-link>
   <div class="recipe" v-if="recipe">
     <h1>{{ recipe.name }}</h1>
+    <h2>Ingredients</h2>
+    <ul>
+      <li v-for="ingredient in recipe.ingredients">
+        <span>{{ ingredient.name }}: {{ ingredient.amount }}</span>
+      </li>
+    </ul>
+    <h2>Steps</h2>
     <p>{{ recipe.description }}</p>
   </div>
   <div v-else>Invalid recipe id</div>
@@ -12,6 +19,7 @@ import { Ref, ref, onMounted } from 'vue';
 import { IRecipe } from '../types/viewModels';
 import * as repository from '../services/recipes-repository'
 import { useRoute } from 'vue-router';
+
 const route = useRoute();
 
 if (typeof route.params.recipeId !== "string") {
@@ -20,8 +28,8 @@ if (typeof route.params.recipeId !== "string") {
   );
 }
 const recipeId = parseInt(route.params.recipeId);
-onMounted(async() => {
- recipe.value = await repository.recipe(recipeId);
+onMounted(async () => {
+  recipe.value = await repository.recipe(recipeId);
 });
 const recipe: Ref<IRecipe | null> = ref(null);
 
@@ -29,8 +37,17 @@ const recipe: Ref<IRecipe | null> = ref(null);
 
 <style scoped lang="scss">
 .recipe {
+  margin-left: 25vw;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
+
+  > h2 {
+    margin-top: 1.5rem;
+  }
+
+  > ul {
+    padding-left: 2rem;
+  }
 }
 </style>
