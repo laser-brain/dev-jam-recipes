@@ -3,10 +3,13 @@
     <img src="/src/assets/logo.png" alt="recipe" />
     <div class="recipe-data">
       <h2>{{ props.recipe.name }}</h2>
+      <font-awesome-icon icon="exclamation-circle" />&nbsp;
       <span>Difficulty: {{ recipe.difficulty }}</span>
       <br />
+      <font-awesome-icon icon="drumstick-bite" />&nbsp;
       <span>Type: {{ recipe.type }}</span>
       <br />
+      <font-awesome-icon icon="hashtag" />&nbsp;
       <span>Servings: {{ recipe.servings }}</span>
     </div>
   </div>
@@ -15,6 +18,11 @@
 <script setup lang="ts">
 import { PropType } from "vue"
 import { IRecipe } from '../types/viewModels';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faDrumstickBite, faExclamationCircle, faHashtag } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faDrumstickBite, faExclamationCircle, faHashtag)
 
 const props = defineProps({
   recipe: {
