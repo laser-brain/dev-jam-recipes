@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	"strconv"
 
@@ -29,8 +30,32 @@ func getRecipes(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"recipes": recipes})
 }
 
+func seedDatabase() {
+	for i := 1; i < 21; i++ {
+		stringIndex := strconv.Itoa(i)
+		recipe := &Recipe{
+			Id:          i,
+			Name:        "Test recipe " + stringIndex,
+			Type:        "Supper",
+			Difficulty:  "Beginner",
+			Description: "This is the description of the recipe #" + stringIndex + " from the cloud-database.",
+			Thumbnail:   "https://www.themealdb.com/images/logo-small.png",
+			Ingredients: []Ingredient{{Name: "Meat", Amount: "much"}},
+		}
+
+		InsertRecipe(recipe)
+	}
+}
+
 func main() {
 	godotenv.Load()
+	cmd := flag.String("cmd", "", "")
+	flag.Parse()
+
+	cmdValue := string(*cmd)
+	if cmdValue == "seed" {
+		seedDatabase()
+	}
 
 	router := gin.Default()
 	router.GET("/recipes", getRecipes)
