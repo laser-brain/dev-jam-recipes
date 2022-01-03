@@ -6,24 +6,15 @@
       custom
       v-slot="{ navigate }"
     >
-      <div class="recipe-preview" @click="navigate">
-        <img src="/src/assets/logo.png" alt="recipe" />
-        <div class="recipe-data">
-          <h2>{{ recipe.name }}</h2>
-          <span>{{ recipe.difficulty }}</span>
-          <br />
-          <span>{{ recipe.type }}</span>
-          <br />
-          <span>Servings: {{ recipe.servings }}</span>
-        </div>
-      </div>
+      <RecipeThumbnail :recipe="recipe" @click="navigate" />
     </router-link>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IRecipe } from "../types/viewModels";
 import { Ref, ref, onMounted } from "vue";
+import RecipeThumbnail from "../components/RecipeThumbnail.vue"
+import { IRecipe } from "../types/viewModels";
 import * as repository from '../services/recipes-repository'
 
 onMounted(async () => {
@@ -49,9 +40,9 @@ const recipes: Ref<IRecipe[] | null> = ref([])
   border: 1px solid black;
   border-radius: 5px;
 
-> * {
-  padding: 1.5rem;
-}
+  > * {
+    padding: 1.5rem;
+  }
   img {
     padding: 1rem;
     height: 10rem;
