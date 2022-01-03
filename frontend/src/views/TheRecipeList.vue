@@ -20,7 +20,7 @@ import { Ref, ref } from "vue";
 import { IRecipe } from "../types/viewModels";
 import * as repository from '../services/recipes-repository' 
 
-const recipes: Ref<IRecipe[]> = ref(repository.recipes());
+const recipes = ref(repository.recipes());
 </script>
 
 <style lang="scss">
