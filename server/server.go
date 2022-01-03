@@ -41,6 +41,7 @@ func seedDatabase() {
 			Type:        "Supper",
 			Difficulty:  "Beginner",
 			Description: "This is the description of the recipe #" + stringIndex + " from the cloud-database.",
+			Servings:    5,
 			Thumbnail:   "https://www.themealdb.com/images/logo-small.png",
 			Ingredients: []Ingredient{{Name: "Meat", Amount: "much"}},
 		}

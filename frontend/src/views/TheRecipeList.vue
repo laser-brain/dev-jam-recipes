@@ -13,6 +13,8 @@
           <span>{{ recipe.difficulty }}</span>
           <br />
           <span>{{ recipe.type }}</span>
+          <br />
+          <span>Servings: {{ recipe.servings }}</span>
         </div>
       </div>
     </router-link>

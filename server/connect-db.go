@@ -19,6 +19,7 @@ type Recipe struct {
 	Difficulty  string       `json:"difficulty"`
 	Description string       `json:"description"`
 	Thumbnail   string       `json:"thumbnail"`
+	Servings    int          `json:"servings"`
 	Ingredients []Ingredient `json:"ingredients"`
 }
 
