@@ -13,28 +13,18 @@ import (
 )
 
 type Recipe struct {
-	Id          int    `json:"id" bson:"_id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Thumbnail   string `json:"thumbnail"`
+	Id          int          `json:"id" bson:"_id"`
+	Name        string       `json:"name"`
+	Type        string       `json:"type"`
+	Difficulty  string       `json:"difficulty"`
+	Description string       `json:"description"`
+	Thumbnail   string       `json:"thumbnail"`
+	Ingredients []Ingredient `json:"ingredients"`
 }
 
-func TestInsert() {
-	data := TestConnection()
-	var id int
-	if data == nil {
-		id = 1
-	} else {
-		id = len(data) + 1
-	}
-
-	recipe := &Recipe{
-		Id:          id,
-		Name:        "test-db-recipe",
-		Description: "This is data from mongo database",
-		Thumbnail:   "https://www.themealdb.com/images/logo-small.png",
-	}
-	InsertRecipe(recipe)
+type Ingredient struct {
+	Name   string `json:"name"`
+	Amount string `json:"amount"`
 }
 
 func InsertRecipe(recipe *Recipe) {
@@ -77,28 +67,6 @@ func GetAllRecipesPaged(skip *int64, size *int64, responseChannel chan []Recipe)
 	}
 
 	responseChannel <- recipes
-}
-
-func TestConnection() []Recipe {
-	ctx, client, cancel := loadCollection()
-	defer client.Disconnect(ctx)
-	defer cancel()
-
-	collection := client.Database("recipes").Collection("recipes")
-
-	cur, currErr := collection.Find(ctx, bson.D{})
-	if currErr != nil {
-		panic(currErr)
-	}
-	defer cur.Close(ctx)
-
-	var recipes []Recipe
-	err := cur.All(ctx, &recipes)
-	if err != nil {
-		panic(err)
-	}
-
-	return recipes
 }
 
 func loadCollection() (context.Context, *mongo.Client, context.CancelFunc) {
