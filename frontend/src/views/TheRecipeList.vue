@@ -16,11 +16,18 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from "vue";
+import { Ref, ref, onMounted } from "vue";
+import * as repository from '../services/recipes-repository'
 import { IRecipe } from "../types/viewModels";
-import * as repository from '../services/recipes-repository' 
 
-const recipes = ref(repository.recipes());
+onMounted(async () => {
+  const data = await repository.recipes()
+  console.log(data);
+
+  recipes.value = data;
+});
+
+const recipes: Ref<IRecipe[] | null> = ref([])
 </script>
 
 <style lang="scss">

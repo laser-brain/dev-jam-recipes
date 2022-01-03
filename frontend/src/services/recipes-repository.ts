@@ -1,20 +1,32 @@
 import { IRecipe } from "../types/viewModels";
 
-const data: IRecipe[] = [];
-  for (let index = 1; index <= 20; index++) {
-    data.push({
-      id: index,
-      name: `recipe ${index}`,
-      thumbnail: "https://www.themealdb.com/images/logo-small.png",
-      description: `This is the description of the recipe #${index}`
-    });
-  }
+interface IRecipesAPIResponse {
+  recipes: IRecipe[];
+}
 
-export function recipes(): IRecipe[] {  
+const data: IRecipe[] = [];
+
+async function loadData() {
+  var apiResponse = await fetch("http://localhost:8080/recipes?page=1&size=20")
+  var responseData : IRecipesAPIResponse = await apiResponse.json();
+
+  for(let item of responseData.recipes) {
+    data.push(item);
+  }
+}
+
+export async function recipes(): Promise<IRecipe[]> {  
+  if(data.length === 0) {
+    await loadData();
+  }
   return data;
 }
 
-export function recipe(id: number) : IRecipe | null {
+export async function recipe(id: number) : Promise<IRecipe | null> {
+  if(data.length === 0) {
+    await loadData();
+  }
+
   const filtered = data.filter(recipe => recipe.id === id);
   if(filtered.length === 1){
     return filtered[0];
