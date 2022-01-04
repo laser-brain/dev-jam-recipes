@@ -32,6 +32,14 @@ func getRecipes(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"recipes": recipes})
 }
 
+func addRecipe(c *gin.Context) {
+	var recipe Recipe
+	if err := c.BindJSON(&recipe); err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	InsertRecipe(&recipe)
+}
+
 func seedDatabase() {
 	for i := 1; i < 21; i++ {
 		stringIndex := strconv.Itoa(i)
@@ -64,15 +72,13 @@ func main() {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE", "PATCH"},
-		AllowHeaders:     []string{"Origin"},
+		AllowHeaders:     []string{"*"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "https://github.com"
-		},
-		MaxAge: 12 * time.Hour,
+		MaxAge:           12 * time.Hour,
 	}))
 	router.GET("/recipes", getRecipes)
+	router.POST("/recipes", addRecipe)
 
 	router.Run("localhost:8080")
 }
