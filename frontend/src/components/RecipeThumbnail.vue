@@ -7,9 +7,10 @@
   >
     <div :class="props.featured ? 'recipe-preview featured' : 'recipe-preview'" @click="navigate">
       <h1 v-if="props.featured">Featured recipe</h1>
+      <h2 v-if="props.featured">{{ props.recipe.name }}</h2>
       <img :src="recipe.thumbnail" alt="recipe" />
       <div class="recipe-data">
-        <h2>{{ props.recipe.name }}</h2>
+        <h2 v-if="!props.featured">{{ props.recipe.name }}</h2>
         <font-awesome-icon icon="exclamation-circle" />&nbsp;
         <span>Difficulty: {{ recipe.difficulty }}</span>
         <br />
@@ -17,7 +18,7 @@
         <span>Type: {{ recipe.type }}</span>
         <br />
         <font-awesome-icon icon="hashtag" />&nbsp;
-        <span>Servings: {{ recipe.servings }}</span>
+        <span>Servings: {{ recipe.servings > 0 ? recipe.servings : 'unknown' }}</span>
       </div>
     </div>
   </router-link>
@@ -52,7 +53,6 @@ const props = defineProps({
   width: 30vw;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #0677a1;
 
   h2 {
     font-family: "Parisienne", cursive;
@@ -74,9 +74,23 @@ const props = defineProps({
   }
 
   &.featured {
-    height: 50vh;
+    min-height: 50vh;
     width: 30vw;
     flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 25vw;
+      height: 25vw;
+    }
+
+    .recipe-data {
+      width: 100%;
+      text-align: left;
+      > svg {
+        margin-left: 3rem;
+      }
+    }
   }
 }
 </style>
