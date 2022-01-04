@@ -63,7 +63,6 @@ header {
   }
 
   @media screen and (orientation: portrait) {
-    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -121,8 +120,8 @@ button,
 }
 
 button {
-  margin-top: .5em;
-  margin-left: .5em;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
   background-color: Transparent;
   border: none;
 }

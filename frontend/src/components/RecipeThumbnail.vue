@@ -54,13 +54,17 @@ const props = defineProps({
   border: 1px solid black;
   border-radius: 5px;
 
+  @media screen and (orientation: portrait) {
+    width: 90vw;
+    min-height: 30vh;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0 1rem 0;
+  }
+
   h2 {
     font-family: "Parisienne", cursive;
     font-size: 2.5em;
-  }
-
-  > * {
-    padding: 0.5rem;
   }
 
   img {
@@ -75,20 +79,25 @@ const props = defineProps({
 
   &.featured {
     min-height: 50vh;
-    width: 30vw;
     flex-direction: column;
     align-items: center;
 
     img {
       width: 25vw;
       height: 25vw;
+      @media screen and (orientation: portrait) {
+        width: 25vh;
+        height: 25vh;
+      }
     }
 
-    .recipe-data {
-      width: 100%;
-      text-align: left;
-      > svg {
-        margin-left: 3rem;
+    @media screen and (orientation: landscape) {
+      .recipe-data {
+        text-align: left;
+        width: 100%;
+        > svg {
+          margin-left: 3rem;
+        }
       }
     }
   }

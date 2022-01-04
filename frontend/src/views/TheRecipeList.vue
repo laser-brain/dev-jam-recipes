@@ -44,8 +44,8 @@ onMounted(async () => {
 .recipes {
   display: flex;
   width: 100vw;
+  max-width: 100vw;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 0.5em;
 }
 </style>
