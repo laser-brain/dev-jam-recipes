@@ -21,6 +21,5 @@ import TheHeader from "./components/TheHeader.vue"
   -moz-osx-font-smoothing: grayscale;
   background-color: white;
   min-height: 100vh;
-
 }
 </style>
