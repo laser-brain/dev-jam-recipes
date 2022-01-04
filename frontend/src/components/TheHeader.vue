@@ -1,8 +1,10 @@
 <template>
   <header>
-    <a href="/">
-      <img id="img-home" src="/src/assets/writing-pad.jpg" alt="recipe-writing-pad" />
-    </a>
+    <router-link to="/" custom v-slot="{ navigate }">
+      <button @click="navigate">
+        <font-awesome-icon id="home" icon="utensils" />
+      </button>
+    </router-link>
     <div id="search-container">
       <input
         id="search-query"
@@ -11,7 +13,11 @@
         v-model="query"
       />
       <select v-model="source" id="search-source">
-        <option v-for="option in options" v-bind:value="option.id">{{ option.name }}</option>
+        <option
+          v-for="option in options"
+          :value="option.value"
+          :key="option.value"
+        >{{ option.name }}</option>
       </select>
     </div>
   </header>
@@ -20,59 +26,104 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import router from '../router'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUtensils } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faUtensils)
 
 const query = ref('');
-const source = ref('themealdb');
+const source = ref('');
 
 const options = [
-  { id: "local", name: "Database" },
-  { id: "themealdb", name: "themealdb.com" },
+  { value: "", name: "Select source ..." },
+  { value: "local", name: "Database" },
+  { value: "themealdb", name: "themealdb.com" },
 ];
 
 const checkSubmit = function (payload: KeyboardEvent) {
   if (payload.key === 'Enter') {
-    router.push({ name: 'search', query: { q: query.value, source: source.value} });
+    router.push({ name: 'search', query: { q: query.value, source: source.value || 'local' } });
   }
 }
 </script>
 
 <style scoped lang="scss">
 header {
-  padding: 0.5em;
-  padding-left: calc(3em - 3px);
   display: flex;
   align-items: center;
 
-  > * {
-    margin-right: 2em;
+  @media screen and (orientation: landscape) {
+    > * {
+      margin-right: 2rem;
+    }
+    * {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (orientation: portrait) {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    * {
+      font-size: 1.5rem;
+    }
   }
 }
 
 #search-container {
-  width: calc(100vw - 128px);
+  width: calc(100vw - 64px);
+  @media screen and (orientation: portrait) {
+    width: 100vw;
+    > * {
+      margin: 0.25rem;
+    }
+  }
 }
 
 #search-query {
-  width: calc(50vw - 128px);
+  width: 30vw;
   text-overflow: hidden;
-  font-size: 2em;
-  margin-left: calc(25vw - 250px - 2em - 1em);
+  margin-left: calc(25vw - 64px);
   border-radius: 5px;
-  padding: .1em;
-  border: none;
-  margin-right: .5em;
-}
-#search-source {
-  padding: .1em;
-  margin-left: .5em;
-  width: 320px;
-  font-size: 2em;
-  background-color: #0677a1;
-  border: none;
-  border-radius: 5px;
+  padding: 0.1em;
+  border: 1px solid black;
+  margin-right: 0.5em;
+  @media screen and (orientation: portrait) {
+    margin-left: 0.5em;
+    width: 90vw;
+  }
 }
 
-#img-home {
-  width: 128px;
+#search-source {
+  padding: 0.1em;
+  margin-left: 0.5em;
+  width: 320px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  @media screen and (orientation: portrait) {
+    width: 90vw;
+  }
+}
+
+button,
+#home {
+  height: 64px;
+  width: 64px;
+
+  @media screen and (orientation: portrait) {
+    height: 32px;
+    width: 32px;
+  }
+}
+
+button {
+  margin-top: .5em;
+  margin-left: .5em;
+  background-color: Transparent;
+  border: none;
 }
 </style>
