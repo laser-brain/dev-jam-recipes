@@ -3,8 +3,10 @@ import TheHeader from "./components/TheHeader.vue"
 </script>
 
 <template>
-  <the-header />
-  <router-view :key="$route.fullPath" />
+  <div>
+    <the-header />
+    <router-view :key="$route.fullPath" />
+  </div>
 </template>
 
 <style>
@@ -14,10 +16,11 @@ import TheHeader from "./components/TheHeader.vue"
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Noto Serif", serif; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #2d4159;
   min-height: 100vh;
+
 }
 </style>

@@ -1,13 +1,9 @@
 <template>
+  <div class="recipes feature">
+    <recipe-thumbnail v-if="featuredRecipe" :recipe="featuredRecipe" :featured="true" />
+  </div>
   <div class="recipes">
-    <router-link
-      v-for="recipe in recipes"
-      :to="`/recipe/${recipe.id}`"
-      custom
-      v-slot="{ navigate }"
-    >
-      <RecipeThumbnail :recipe="recipe" @thumbnail-clicked="navigate" />
-    </router-link>
+    <recipe-thumbnail v-for="recipe in recipes" :recipe="recipe" :key="recipe.id" />
   </div>
 </template>
 
@@ -21,22 +17,25 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const recipes: Ref<IRecipe[] | null> = ref([])
+const featuredRecipe: Ref<IRecipe | null> = ref(null);
 
 onMounted(async () => {
   const q = route.query["q"]?.toString()
   const src = route.query["source"]?.toString();
+
   if (q) {
     switch (src) {
       case "themealdb":
         recipes.value = await themealdb.search(q)
         break;
       case "local":
-      default:
-        recipes.value = await repository.search(q)
+        default:
+          recipes.value = await repository.search(q)
         break;
     }
   } else {
     recipes.value = await repository.recipes()
+    featuredRecipe.value = await themealdb.getRandomRecipe();
   }
 });
 </script>

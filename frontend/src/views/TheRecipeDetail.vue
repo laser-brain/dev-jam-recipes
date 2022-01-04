@@ -1,15 +1,14 @@
 <template>
-  <router-link :to="'/'">Overview</router-link>
   <div class="recipe" v-if="recipe">
     <h1>{{ recipe.name }}</h1>
     <h2>Ingredients</h2>
     <ul>
-      <li v-for="ingredient in recipe.ingredients">
+      <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
         <span>{{ ingredient.name }}: {{ ingredient.amount }}</span>
       </li>
     </ul>
     <h2>Steps</h2>
-    <p>{{ recipe.description }}</p>
+    <p v-html="recipe.description.replaceAll('\r\n', '<br />')"></p>
   </div>
   <div v-else>Invalid recipe id</div>
 </template>

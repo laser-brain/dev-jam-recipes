@@ -27,6 +27,15 @@ function mapData(recipeData: IMealDBRecipe): IRecipe {
   };
 }
 
+export async function getRandomRecipe() : Promise<IRecipe> {
+  const apiResponse = await fetch(`${API_URL}/random.php`);
+
+  const responseData: IMealDBRecipeAPIReponse = await apiResponse.json();
+  const recipeData = responseData.meals[0];
+
+  return mapData(recipeData);
+}
+
 export async function recipe(id: number): Promise<IRecipe | null> {
   const apiResponse = await fetch(`${API_URL}/lookup.php?i=${id}`);
 
