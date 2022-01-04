@@ -1,6 +1,6 @@
 <template>
   <div class="recipe-preview" @click="click">
-    <img src="/src/assets/logo.png" alt="recipe" />
+    <img :src="recipe.thumbnail" alt="recipe" />
     <div class="recipe-data">
       <h2>{{ props.recipe.name }}</h2>
       <font-awesome-icon icon="exclamation-circle" />&nbsp;
