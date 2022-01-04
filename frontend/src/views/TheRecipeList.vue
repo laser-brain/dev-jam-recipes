@@ -1,9 +1,9 @@
 <template>
   <div class="recipes feature">
-    <recipe-thumbnail v-if="featuredRecipe" :recipe="featuredRecipe" :featured="true" />
+    <recipe-thumbnail v-if="featuredRecipe" :recipe="featuredRecipe" :featured="true" :add-button-enabled="true" />
   </div>
   <div class="recipes">
-    <recipe-thumbnail v-for="recipe in recipes" :recipe="recipe" :key="recipe.id" />
+    <recipe-thumbnail v-for="recipe in recipes" :recipe="recipe" :key="recipe.id" :add-button-enabled="addButtonEnabled"  />
   </div>
 </template>
 
@@ -16,25 +16,26 @@ import * as themealdb from '../services/themealdb-repository'
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const recipes: Ref<IRecipe[] | null> = ref([])
+const recipes: Ref<IRecipe[] | null> = ref([]);
 const featuredRecipe: Ref<IRecipe | null> = ref(null);
-
+const addButtonEnabled = ref(false);
 onMounted(async () => {
-  const q = route.query["q"]?.toString()
+  const q = route.query["q"]?.toString();
   const src = route.query["source"]?.toString();
 
   if (q) {
     switch (src) {
       case "themealdb":
-        recipes.value = await themealdb.search(q)
+        recipes.value = await themealdb.search(q);
+        addButtonEnabled.value = true;
         break;
       case "local":
-        default:
-          recipes.value = await repository.search(q)
+      default:
+        recipes.value = await repository.search(q);
         break;
     }
   } else {
-    recipes.value = await repository.recipes()
+    recipes.value = await repository.recipes();
     featuredRecipe.value = await themealdb.getRandomRecipe();
   }
 });

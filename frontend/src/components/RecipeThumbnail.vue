@@ -20,6 +20,7 @@
         <font-awesome-icon icon="hashtag" />&nbsp;
         <span>Servings: {{ recipe.servings > 0 ? recipe.servings : 'unknown' }}</span>
       </div>
+      <button v-if="props.addButtonEnabled" class="glued" @click.stop="addToLocalDatabase">+</button>
     </div>
   </router-link>
 </template>
@@ -30,6 +31,7 @@ import { IRecipe } from '../types/viewModels';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faDrumstickBite, faExclamationCircle, faHashtag } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import * as repository from '../services/recipes-repository'
 
 library.add(faDrumstickBite, faExclamationCircle, faHashtag)
 
@@ -41,12 +43,39 @@ const props = defineProps({
   featured: {
     type: Boolean,
     required: false
+  },
+  addButtonEnabled: {
+    type: Boolean,
+    required: true
   }
 });
+
+function addToLocalDatabase() {
+  repository.addRecipe(props.recipe);
+}
+
 </script>
 
 <style scoped lang="scss">
+.glued {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: transparent;
+  z-index: 3;
+
+  &:hover {
+    transform: scale(1.2);
+    transition: all 0.5s;
+  }
+}
+
 .recipe-preview {
+  position: relative;
   display: flex;
   margin: 1em;
   padding: 0.5em;

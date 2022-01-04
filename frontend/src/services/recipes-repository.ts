@@ -1,5 +1,7 @@
 import { IRecipe } from "../types/viewModels";
 
+const API_URL = 'http://localhost:8080/recipes'
+
 interface IRecipesAPIResponse {
   recipes: IRecipe[];
 }
@@ -7,7 +9,7 @@ interface IRecipesAPIResponse {
 const data: IRecipe[] = [];
 
 async function loadData() {
-  var apiResponse = await fetch("http://localhost:8080/recipes?page=1&size=20");
+  var apiResponse = await fetch(`${API_URL}?page=1&size=2000`);
   var responseData: IRecipesAPIResponse = await apiResponse.json();
 
   for (let item of responseData.recipes) {
@@ -41,4 +43,15 @@ export async function search(query: string) {
   }
 
   return data.filter((recipe) => recipe.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+}
+
+export async function addRecipe(recipe: IRecipe) {
+  await fetch(`${API_URL}`, { 
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      contentType: 'application/json',
+    },
+    body: JSON.stringify(recipe)
+  });
 }
