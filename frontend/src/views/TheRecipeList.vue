@@ -6,7 +6,7 @@
       custom
       v-slot="{ navigate }"
     >
-      <RecipeThumbnail :recipe="recipe" @click="navigate" />
+      <RecipeThumbnail :recipe="recipe" @thumbnail-clicked="navigate" />
     </router-link>
   </div>
 </template>
@@ -20,24 +20,25 @@ import * as themealdb from '../services/themealdb-repository'
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const q = route.query["q"]?.toString()
-const src = route.query["source"]?.toString();
+const recipes: Ref<IRecipe[] | null> = ref([])
 
 onMounted(async () => {
+  const q = route.query["q"]?.toString()
+  const src = route.query["source"]?.toString();
   if (q) {
-    switch (src) {      
+    switch (src) {
       case "themealdb":
         recipes.value = await themealdb.search(q)
-        case "local":
-        default:
-          recipes.value = await repository.search(q)
+        break;
+      case "local":
+      default:
+        recipes.value = await repository.search(q)
+        break;
     }
   } else {
     recipes.value = await repository.recipes()
   }
 });
-
-const recipes: Ref<IRecipe[] | null> = ref([])
 </script>
 
 <style scoped lang="scss">
