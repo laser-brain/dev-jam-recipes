@@ -1,16 +1,19 @@
 <template>
-  <div class="recipe" v-if="recipe">
-    <h1>{{ recipe.name }}</h1>
-    <h2>Ingredients</h2>
-    <ul>
-      <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
-        <span>{{ ingredient.name }}: {{ ingredient.amount }}</span>
-      </li>
-    </ul>
-    <h2>Steps</h2>
-    <p v-html="recipe.description.replaceAll('\r\n', '<br />')"></p>
+  <div class="flex-container">
+    <img v-if="recipe" :src="recipe.thumbnail" />
+    <div class="recipe" v-if="recipe">
+      <h1>{{ recipe.name }}</h1>
+      <h2>Ingredients</h2>
+      <ul>
+        <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
+          <span>{{ ingredient.name }}: {{ ingredient.amount }}</span>
+        </li>
+      </ul>
+      <h2>Steps</h2>
+      <p v-html="recipe.description.replaceAll('\r\n', '<br />')"></p>
+    </div>
+    <div v-else>Invalid recipe id</div>
   </div>
-  <div v-else>Invalid recipe id</div>
 </template>
 
 <script setup lang="ts">
@@ -31,7 +34,7 @@ const recipeId = parseInt(route.params.recipeId);
 const recipeSource = route.query["source"];
 
 onMounted(async () => {
-  if(recipeSource && recipeSource === "external") {
+  if (recipeSource && recipeSource === "external") {
     recipe.value = await themealdb.recipe(recipeId);
   }
   else {
@@ -43,12 +46,22 @@ const recipe: Ref<IRecipe | null> = ref(null);
 </script>
 
 <style scoped lang="scss">
+
+.flex-container {
+  display: flex;
+}
+img {
+  width: 20vw;
+  height: 20vw;
+  margin: 2.5vw;
+}
 .recipe {
-  margin-left: 25vw;
+  margin-top: 2.5vw;
   margin-right: 25vw;
   display: flex;
   flex-direction: column;
   align-items: left;
+  background-color: white;
 
   > h2 {
     margin-top: 1.5rem;

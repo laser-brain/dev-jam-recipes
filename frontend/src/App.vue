@@ -19,7 +19,7 @@ import TheHeader from "./components/TheHeader.vue"
   font-family: "Noto Serif", serif; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #2d4159;
+  background-color: white;
   min-height: 100vh;
 
 }
