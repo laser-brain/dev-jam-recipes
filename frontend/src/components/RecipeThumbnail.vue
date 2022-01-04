@@ -36,3 +36,31 @@ function click() {
   emit('thumbnailClicked');
 }
 </script>
+
+<style scoped lang="scss">
+
+.recipe-preview {
+  display: flex;
+  margin: 1em;
+  padding: 0.5em;
+  width: 30vw;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #0677a1;
+
+  > * {
+    padding: 1.5rem;
+  }
+
+  img {
+    padding: 1rem;
+    height: 10rem;
+    width: 10rem;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    transition: all .2s
+  }
+}
+</style>

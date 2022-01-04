@@ -5,13 +5,18 @@ import TheRecipeList from '@/views/TheRecipeList.vue';
 const routes = [
   {
     path: '/',
-    name: 'RecipeList',
+    name: 'recipe-list',
     component: TheRecipeList,
   },
   {
     path: '/recipe/:recipeId',
-    name: 'Recipe',
+    name: 'recipe-detail',
     component: TheRecipeDetail,
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: TheRecipeList,
   },
 ];
 

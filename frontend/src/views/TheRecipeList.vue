@@ -16,41 +16,36 @@ import { Ref, ref, onMounted } from "vue";
 import RecipeThumbnail from "../components/RecipeThumbnail.vue"
 import { IRecipe } from "../types/viewModels";
 import * as repository from '../services/recipes-repository'
+import * as themealdb from '../services/themealdb-repository'
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const q = route.query["q"]?.toString()
+const src = route.query["source"]?.toString();
 
 onMounted(async () => {
-  recipes.value = await repository.recipes();
+  if (q) {
+    switch (src) {      
+      case "themealdb":
+        recipes.value = await themealdb.search(q)
+        case "local":
+        default:
+          recipes.value = await repository.search(q)
+    }
+  } else {
+    recipes.value = await repository.recipes()
+  }
 });
 
 const recipes: Ref<IRecipe[] | null> = ref([])
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .recipes {
   display: flex;
   width: 100vw;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.recipe-preview {
-  display: flex;
-  margin: 1em;
   padding: 0.5em;
-  width: 30vw;
-  border: 1px solid black;
-  border-radius: 5px;
-
-  > * {
-    padding: 1.5rem;
-  }
-  img {
-    padding: 1rem;
-    height: 10rem;
-    width: 10rem;
-  }
-}
-
-.recipe-data {
-  flex-direction: column;
 }
 </style>

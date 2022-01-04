@@ -18,6 +18,7 @@
 import { Ref, ref, onMounted } from 'vue';
 import { IRecipe } from '../types/viewModels';
 import * as repository from '../services/recipes-repository'
+import * as themealdb from '../services/themealdb-repository'
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -28,8 +29,15 @@ if (typeof route.params.recipeId !== "string") {
   );
 }
 const recipeId = parseInt(route.params.recipeId);
+const recipeSource = route.query["source"];
+
 onMounted(async () => {
-  recipe.value = await repository.recipe(recipeId);
+  if(recipeSource && recipeSource === "external") {
+    recipe.value = await themealdb.recipe(recipeId);
+  }
+  else {
+    recipe.value = await repository.recipe(recipeId);
+  }
 });
 const recipe: Ref<IRecipe | null> = ref(null);
 
@@ -38,6 +46,7 @@ const recipe: Ref<IRecipe | null> = ref(null);
 <style scoped lang="scss">
 .recipe {
   margin-left: 25vw;
+  margin-right: 25vw;
   display: flex;
   flex-direction: column;
   align-items: left;
