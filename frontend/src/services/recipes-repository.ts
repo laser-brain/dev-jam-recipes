@@ -1,6 +1,6 @@
 import { IRecipe } from "../types/viewModels";
 
-const API_URL = 'http://localhost:8080/recipes'
+const API_URL = import.meta.env.VITE_API_URL
 
 interface IRecipesAPIResponse {
   recipes: IRecipe[];
