@@ -1,6 +1,6 @@
 import { IRecipe } from "../types/viewModels";
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface IRecipesAPIResponse {
   recipes: IRecipe[];
@@ -29,7 +29,7 @@ export async function recipe(id: number): Promise<IRecipe | null> {
     await loadData();
   }
 
-  const filtered = data.filter((recipe) => recipe.id === id);
+  const filtered = data.filter((recipe) => recipe.id == id);
   if (filtered.length === 1) {
     return filtered[0];
   }
@@ -42,16 +42,18 @@ export async function search(query: string) {
     await loadData();
   }
 
-  return data.filter((recipe) => recipe.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  return data.filter(
+    (recipe) => recipe.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+  );
 }
 
 export async function addRecipe(recipe: IRecipe) {
-  await fetch(`${API_URL}`, { 
-    method: 'POST',
-    mode: 'cors',
+  await fetch(`${API_URL}`, {
+    method: "POST",
+    mode: "cors",
     headers: {
-      contentType: 'application/json',
+      contentType: "application/json",
     },
-    body: JSON.stringify(recipe)
+    body: JSON.stringify(recipe),
   });
 }
