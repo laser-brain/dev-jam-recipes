@@ -79,15 +79,16 @@ function addToLocalDatabase() {
   display: flex;
   margin: 1em;
   padding: 0.5em;
-  width: 30vw;
+  width: 15vw;
+  min-height: 50vh;
   border: 1px solid black;
   border-radius: 5px;
+  flex-direction: column;
+  align-items: center;
 
   @media screen and (orientation: portrait) {
     width: 90vw;
     min-height: 30vh;
-    flex-direction: column;
-    align-items: center;
     margin: 1rem 0 1rem 0;
   }
 
@@ -107,9 +108,14 @@ function addToLocalDatabase() {
   }
 
   &.featured {
+    width: 30vw;
     min-height: 50vh;
     flex-direction: column;
     align-items: center;
+
+    @media screen and (orientation: portrait) {
+      width: 100%;
+    }
 
     img {
       width: 25vw;

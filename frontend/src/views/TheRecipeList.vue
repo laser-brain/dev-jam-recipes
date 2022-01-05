@@ -1,9 +1,19 @@
 <template>
   <div class="recipes feature">
-    <recipe-thumbnail v-if="featuredRecipe" :recipe="featuredRecipe" :featured="true" :add-button-enabled="true" />
+    <recipe-thumbnail
+      v-if="featuredRecipe"
+      :recipe="featuredRecipe"
+      :featured="true"
+      :add-button-enabled="true"
+    />
   </div>
   <div class="recipes">
-    <recipe-thumbnail v-for="recipe in recipes" :recipe="recipe" :key="recipe.id" :add-button-enabled="addButtonEnabled"  />
+    <recipe-thumbnail
+      v-for="recipe in recipes"
+      :recipe="recipe"
+      :key="recipe.id"
+      :add-button-enabled="addButtonEnabled"
+    />
   </div>
 </template>
 
@@ -37,6 +47,8 @@ onMounted(async () => {
   } else {
     recipes.value = await repository.recipes();
     featuredRecipe.value = await themealdb.getRandomRecipe();
+    console.log(featuredRecipe.value);
+
   }
 });
 </script>
@@ -44,8 +56,9 @@ onMounted(async () => {
 <style scoped lang="scss">
 .recipes {
   display: flex;
-  width: 100vw;
-  max-width: 100vw;
+  width: 70vw;
+  margin-left: 15vw;
+  max-width: 70vw;
   flex-wrap: wrap;
   justify-content: center;
 }
