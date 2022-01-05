@@ -16,7 +16,7 @@
         :add-button-enabled="addButtonEnabled"
       />
     </div>
-    <div class="no-content" v-if="recipes?.length === 0">
+    <div class="no-content" v-if="mounted && recipes?.length === 0">
       <span>Sorry, we don't know any recipe for this search term :(</span>
     </div>
   </div>
@@ -34,6 +34,8 @@ const route = useRoute();
 const recipes: Ref<IRecipe[] | null> = ref([]);
 const featuredRecipe: Ref<IRecipe | null> = ref(null);
 const addButtonEnabled = ref(false);
+const mounted = ref(false);
+
 onMounted(async () => {
   const q = route.query["q"]?.toString();
   const src = route.query["source"]?.toString();
@@ -52,7 +54,7 @@ onMounted(async () => {
   } else {
     recipes.value = await repository.recipes();
     featuredRecipe.value = await themealdb.getRandomRecipe();
-    console.log(featuredRecipe.value);
+    mounted.value = true;
   }
 });
 </script>

@@ -28,7 +28,7 @@
       <h2>Steps</h2>
       <p v-html="recipe.description.replaceAll('\r\n', '<br />')"></p>
     </div>
-    <div class="error" v-else>
+    <div class="error" v-else-if="mounted">
       <span>Oops, something went wrong!</span>
     </div>
   </div>
@@ -47,7 +47,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faDrumstickBite, faExclamationCircle, faHashtag, faEdit)
 
 const route = useRoute();
-
+const mounted = ref(false);
 if (typeof route.params.recipeId !== "string") {
   throw new Error(
     `Invalid route param ${JSON.stringify(route.params.recipeId)}`
@@ -63,6 +63,8 @@ onMounted(async () => {
   else {
     recipe.value = await repository.recipe(recipeId);
   }
+
+  mounted.value = true;
 });
 const recipe: Ref<IRecipe | null> = ref(null);
 
@@ -92,6 +94,9 @@ img {
   height: 20vw;
   margin: 2.5vw;
 }
+h2 {
+  margin-top: 1.5rem;
+}
 
 .recipe {
   margin-top: 2.5vw;
@@ -100,10 +105,6 @@ img {
   flex-direction: column;
   align-items: left;
   background-color: white;
-
-  > h2 {
-    margin-top: 1.5rem;
-  }
 
   > ul {
     padding-left: 2rem;
