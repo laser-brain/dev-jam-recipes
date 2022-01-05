@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -70,7 +71,7 @@ func main() {
 
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowOrigins:     []string{"https://festive-ardinghelli-413138.netlify.app"},
 		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"*"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -80,5 +81,6 @@ func main() {
 	router.GET("/recipes", getRecipes)
 	router.POST("/recipes", addRecipe)
 
-	router.Run("localhost:8080")
+	port := os.Getenv("PORT")
+	router.Run(":" + port)
 }
