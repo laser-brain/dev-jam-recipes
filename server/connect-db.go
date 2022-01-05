@@ -13,7 +13,7 @@ import (
 )
 
 type Recipe struct {
-	Id          int          `json:"id" bson:"_id"`
+	Id          int          `json:"id,string" bson:"_id"`
 	Name        string       `json:"name"`
 	Type        string       `json:"type"`
 	Difficulty  string       `json:"difficulty"`
@@ -34,10 +34,14 @@ func InsertRecipe(recipe *Recipe) {
 	defer cancel()
 
 	collection := client.Database("recipes").Collection("recipes")
-
 	res, insertErr := collection.InsertOne(ctx, recipe)
+
 	if insertErr != nil {
-		log.Fatal(insertErr)
+		res, insertErr := collection.ReplaceOne(ctx, bson.M{"_id": recipe.Id}, recipe)
+		if insertErr != nil {
+			log.Fatal(insertErr)
+		}
+		fmt.Printf("Insert response: %q\n", res)
 	}
 	fmt.Printf("Insert response: %q\n", res)
 }
