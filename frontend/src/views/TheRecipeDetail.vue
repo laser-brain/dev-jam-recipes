@@ -3,6 +3,22 @@
     <img v-if="recipe" :src="recipe.thumbnail" />
     <div class="recipe" v-if="recipe">
       <h1>{{ recipe.name }}</h1>
+      <div class="meta-data">
+        <div class="inline-block">
+          <h2>Recipe info</h2>
+        </div>
+        <font-awesome-icon icon="exclamation-circle" />&nbsp;
+        <label for="difficulty">Difficulty:&nbsp;</label>
+        <span>{{ recipe.difficulty }}</span>
+        <br />
+        <font-awesome-icon icon="drumstick-bite" />&nbsp;
+        <label for="type">Type:&nbsp;</label>
+        <span>{{ recipe.type }}</span>
+        <br />
+        <font-awesome-icon icon="hashtag" />&nbsp;
+        <label for="servings">Servings:&nbsp;</label>
+        <span>{{ recipe.servings }}</span>
+      </div>
       <h2>Ingredients</h2>
       <ul>
         <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
@@ -12,7 +28,9 @@
       <h2>Steps</h2>
       <p v-html="recipe.description.replaceAll('\r\n', '<br />')"></p>
     </div>
-    <div v-else>Invalid recipe id</div>
+    <div class="error" v-else>
+      <span>Oops, something went wrong!</span>
+    </div>
   </div>
 </template>
 
@@ -22,6 +40,11 @@ import { IRecipe } from '../types/viewModels';
 import * as repository from '../services/recipes-repository'
 import * as themealdb from '../services/themealdb-repository'
 import { useRoute } from 'vue-router';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faDrumstickBite, faExclamationCircle, faHashtag, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faDrumstickBite, faExclamationCircle, faHashtag, faEdit)
 
 const route = useRoute();
 
@@ -46,15 +69,30 @@ const recipe: Ref<IRecipe | null> = ref(null);
 </script>
 
 <style scoped lang="scss">
-
+.inline-block {
+  display: inline-block;
+  width: 75vw;
+}
+.fa:before {
+  display: inline-block;
+}
 .flex-container {
   display: flex;
 }
+
+.error {
+  width: 100vw;
+  font-size: 3em;
+  display: flex;
+  justify-content: center;
+}
+
 img {
   width: 20vw;
   height: 20vw;
   margin: 2.5vw;
 }
+
 .recipe {
   margin-top: 2.5vw;
   margin-right: 25vw;

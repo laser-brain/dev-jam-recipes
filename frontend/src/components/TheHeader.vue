@@ -33,12 +33,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faUtensils)
 
 const query = ref('');
-const source = ref('');
+const source = ref('themealdb');
 
 const options = [
-  { value: "", name: "Select source ..." },
-  { value: "local", name: "Database" },
   { value: "themealdb", name: "themealdb.com" },
+  { value: "local", name: "Database" },
 ];
 
 const checkSubmit = function (payload: KeyboardEvent) {

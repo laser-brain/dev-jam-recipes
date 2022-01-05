@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="props.featured ? `/recipe/${props.recipe.id}?source=external` : `/recipe/${props.recipe.id}`"
+    :to="props.addButtonEnabled ? `/recipe/${props.recipe.id}?source=external` : `/recipe/${props.recipe.id}`"
     custom
     v-slot="{ navigate }"
     :key="props.recipe.id"
@@ -27,11 +27,11 @@
 
 <script setup lang="ts">
 import { PropType } from "vue"
+import * as repository from '../services/recipes-repository'
 import { IRecipe } from '../types/viewModels';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faDrumstickBite, faExclamationCircle, faHashtag } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import * as repository from '../services/recipes-repository'
 
 library.add(faDrumstickBite, faExclamationCircle, faHashtag)
 
@@ -85,6 +85,7 @@ function addToLocalDatabase() {
   border-radius: 5px;
   flex-direction: column;
   align-items: center;
+  box-shadow: 3px -3px 5px darkgray;
 
   @media screen and (orientation: portrait) {
     width: 90vw;
