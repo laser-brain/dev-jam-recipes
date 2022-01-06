@@ -65,7 +65,11 @@ async function addToLocalDatabase() {
   setTimeout(() => {
     successRef.value = false;
   }, 500)
+
+  emit('addRecipe');
 }
+
+const emit = defineEmits(['addRecipe']);
 
 </script>
 
