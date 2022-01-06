@@ -104,7 +104,6 @@ h2 {
   display: flex;
   flex-direction: column;
   align-items: left;
-  background-color: white;
 
   > ul {
     padding-left: 2rem;

@@ -51,23 +51,18 @@ const checkSubmit = function (payload: KeyboardEvent) {
 header {
   display: flex;
   align-items: center;
-
+  * {
+    font-size: 1.5rem;
+  }
   @media screen and (orientation: landscape) {
     > * {
       margin-right: 2rem;
     }
-    * {
-      font-size: 2rem;
-    }
   }
 
   @media screen and (orientation: portrait) {
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    * {
-      font-size: 1.5rem;
-    }
   }
 }
 

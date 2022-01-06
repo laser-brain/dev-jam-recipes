@@ -5,7 +5,10 @@
     v-slot="{ navigate }"
     :key="props.recipe.id"
   >
-    <div :class="props.featured ? 'recipe-preview featured' : 'recipe-preview'" @click="navigate">
+    <div
+      :class="props.featured ? 'recipe-preview paper featured' : 'recipe-preview paper'"
+      @click="navigate"
+    >
       <h1 v-if="props.featured">Featured recipe</h1>
       <h2 v-if="props.featured">{{ props.recipe.name }}</h2>
       <img :src="recipe.thumbnail" alt="recipe" />
@@ -133,6 +136,7 @@ button {
   flex-direction: column;
   align-items: center;
   box-shadow: 3px -3px 5px darkgray;
+  background-color: white;
 
   @media screen and (orientation: portrait) {
     width: 90vw;

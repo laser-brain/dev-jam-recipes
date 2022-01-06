@@ -3,7 +3,7 @@ import TheHeader from "./components/TheHeader.vue"
 </script>
 
 <template>
-  <div>
+  <div class="paper">
     <the-header />
     <router-view :key="$route.fullPath" />
   </div>
@@ -16,10 +16,14 @@ import TheHeader from "./components/TheHeader.vue"
 }
 
 #app {
-  font-family: "Noto Serif", serif; 
+  font-family: "Noto Serif", serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: white;
+  background-color: #e6ddd2;
   min-height: 100vh;
+}
+
+.paper {
+  background-image: url("/src/assets/beige-paper.png");
 }
 </style>
