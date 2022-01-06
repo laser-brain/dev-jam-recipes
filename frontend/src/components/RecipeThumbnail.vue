@@ -20,8 +20,9 @@
         <font-awesome-icon icon="hashtag" />&nbsp;
         <span>Servings: {{ recipe.servings > 0 ? recipe.servings : 'unknown' }}</span>
       </div>
-      <button v-if="addButtonRef" class="glued" @click.stop="addToLocalDatabase">+</button>
+      <button v-if="addButtonRef && !loading" class="glued" @click.stop="addToLocalDatabase">+</button>
       <font-awesome-icon :class="!successRef ? 'glued hidden' : 'glued'" icon="check-circle" />
+      <font-awesome-icon v-if="loading" class="glued" icon="spinner" />
     </div>
   </router-link>
 </template>
@@ -78,6 +79,21 @@ async function addToLocalDatabase() {
 .fa-check-circle {
   color: green;
 }
+
+.fa-spinner {
+  color: teal;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 button {
   border-radius: 30px;
   border: none;
