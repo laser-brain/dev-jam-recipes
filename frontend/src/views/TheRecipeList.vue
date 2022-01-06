@@ -17,7 +17,7 @@
       />
     </div>
     <div class="no-content" v-if="mounted && recipes?.length === 0">
-      <span>Sorry, we don't know any recipe for this search term :(</span>
+      <span>Sorry, we could not find any recipes for the search term "{{ q }}" :(</span>
     </div>
   </div>
 </template>
@@ -35,27 +35,28 @@ const recipes: Ref<IRecipe[] | null> = ref([]);
 const featuredRecipe: Ref<IRecipe | null> = ref(null);
 const addButtonEnabled = ref(false);
 const mounted = ref(false);
+const q = ref('');
 
 onMounted(async () => {
-  const q = route.query["q"]?.toString();
+  q.value = route.query["q"]?.toString() || '';
   const src = route.query["source"]?.toString();
 
-  if (q) {
+  if (q.value || src) {
     switch (src) {
       case "themealdb":
-        recipes.value = await themealdb.search(q);
+        recipes.value = await themealdb.search(q.value);
         addButtonEnabled.value = true;
         break;
       case "local":
       default:
-        recipes.value = await repository.search(q);
+        recipes.value = await repository.search(q.value);
         break;
     }
   } else {
     recipes.value = await repository.recipes();
     featuredRecipe.value = await themealdb.getRandomRecipe();
-    mounted.value = true;
   }
+  mounted.value = true;
 });
 </script>
 

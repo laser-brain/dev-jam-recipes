@@ -37,7 +37,10 @@ export async function recipe(id: number): Promise<IRecipe | null> {
   return null;
 }
 
-export async function search(query: string) {
+export async function search(query: string): Promise<IRecipe[]> {
+  if (!query) {
+    return [];
+  }
   if (data.length === 0) {
     await loadData();
   }
@@ -47,7 +50,7 @@ export async function search(query: string) {
   );
 }
 
-export async function addRecipe(recipe: IRecipe) {
+export async function addRecipe(recipe: IRecipe): Promise<void> {
   await fetch(`${API_URL}`, {
     method: "POST",
     mode: "cors",

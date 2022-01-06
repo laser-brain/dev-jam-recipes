@@ -20,20 +20,21 @@
         <font-awesome-icon icon="hashtag" />&nbsp;
         <span>Servings: {{ recipe.servings > 0 ? recipe.servings : 'unknown' }}</span>
       </div>
-      <button v-if="props.addButtonEnabled" class="glued" @click.stop="addToLocalDatabase">+</button>
+      <button v-if="addButtonRef" class="glued" @click.stop="addToLocalDatabase">+</button>
+      <font-awesome-icon :class="!successRef ? 'glued hidden' : 'glued'" icon="check-circle" />
     </div>
   </router-link>
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue"
+import { ref, PropType } from "vue"
 import * as repository from '../services/recipes-repository'
 import { IRecipe } from '../types/viewModels';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faDrumstickBite, faExclamationCircle, faHashtag } from '@fortawesome/free-solid-svg-icons'
+import { faDrumstickBite, faExclamationCircle, faHashtag, faCheckCircle, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faDrumstickBite, faExclamationCircle, faHashtag)
+library.add(faDrumstickBite, faExclamationCircle, faHashtag, faCheckCircle, faSpinner);
 
 const props = defineProps({
   recipe: {
@@ -50,13 +51,39 @@ const props = defineProps({
   }
 });
 
-function addToLocalDatabase() {
-  repository.addRecipe(props.recipe);
+const addButtonRef = ref(props.addButtonEnabled);
+const loading = ref(false);
+const successRef = ref(false);
+
+async function addToLocalDatabase() {
+  loading.value = true;
+  await repository.addRecipe(props.recipe);
+  loading.value = false;
+  addButtonRef.value = false;
+  successRef.value = true;
+  setTimeout(() => {
+    successRef.value = false;
+  }, 500)
 }
 
 </script>
 
 <style scoped lang="scss">
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.fa-check-circle {
+  color: green;
+}
+button {
+  border-radius: 30px;
+  border: none;
+  box-shadow: 4px -4px 6px;
+}
+
 .glued {
   position: absolute;
   bottom: 10px;
