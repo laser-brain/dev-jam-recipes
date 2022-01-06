@@ -19,9 +19,11 @@
         </select>
         &nbsp;
         <font-awesome-icon
+          v-if="!loading"
           @click="edit('difficulty')"
           :icon="editFlags?.difficulty.enabled ? 'check' : 'edit'"
         />
+        <font-awesome-icon v-if="loading" icon="spinner" />
         <br />
         <font-awesome-icon icon="drumstick-bite" />&nbsp;
         <label for="type">Type:&nbsp;</label>
@@ -35,9 +37,11 @@
         </select>
         &nbsp;
         <font-awesome-icon
+          v-if="!loading"
           @click="edit('type')"
           :icon="editFlags?.type.enabled ? 'check' : 'edit'"
         />
+        <font-awesome-icon v-if="loading" icon="spinner" />
         <br />
         <font-awesome-icon icon="hashtag" />&nbsp;
         <label for="servings">Servings:&nbsp;</label>
@@ -45,9 +49,11 @@
         <input v-if="editFlags?.servings.enabled" v-model="editFlags.servings.value" />
         &nbsp;
         <font-awesome-icon
+          v-if="!loading"
           @click="edit('servings')"
           :icon="editFlags?.servings.enabled ? 'check' : 'edit'"
         />
+        <font-awesome-icon v-if="loading" icon="spinner" />
       </div>
       <h2>Ingredients</h2>
       <ul>
@@ -71,7 +77,7 @@ import * as repository from '../services/recipes-repository'
 import * as themealdb from '../services/themealdb-repository'
 import { useRoute } from 'vue-router';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faDrumstickBite, faExclamationCircle, faHashtag, faEdit, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faDrumstickBite, faExclamationCircle, faHashtag, faEdit, faCheck, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 type EditFlags = {
@@ -87,11 +93,11 @@ type EditElement = {
   options?: { value: string, name: string }[]
 }
 
-library.add(faDrumstickBite, faExclamationCircle, faHashtag, faEdit, faCheck)
+library.add(faDrumstickBite, faExclamationCircle, faHashtag, faEdit, faCheck, faSpinner)
 
 const recipe: Ref<IRecipe | null> = ref(null);
 const editFlags: Ref<EditFlags | null> = ref(null);
-const debug = ref('');
+const loading = ref(false);
 
 const edit = function (identifier: string) {
   if (!recipe || !recipe.value || !editFlags || !editFlags.value) {
@@ -130,7 +136,13 @@ const recipeSource = route.query["source"];
 
 onMounted(async () => {
   if (recipeSource && recipeSource === "external") {
+    loading.value = true;
     recipe.value = await themealdb.recipe(recipeId);
+    const localCopy = await repository.recipe(recipeId);
+    if (localCopy) {
+      recipe.value = localCopy;
+    }
+    loading.value = false;
   }
   else {
     recipe.value = await repository.recipe(recipeId);
@@ -202,6 +214,20 @@ h2 {
 
   > ul {
     padding-left: 2rem;
+  }
+}
+
+.fa-spinner {
+  color: teal;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
